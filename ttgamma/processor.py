@@ -209,7 +209,7 @@ def categorizeGenPhoton(photon):
 
     # define the photon categories for tight photon events
     # a genuine photon is a reconstructed photon which is matched to a generator level photon, and does not have a hadronic parent
-    isGenPho = ...  # FIXME 2b
+    isGenPho = matchedPho & ~hadronicParent  # FIXME 2b
     # a hadronic photon is a reconstructed photon which is matched to a generator level photon, but has a hadronic parent
     isHadPho = ... #  FIXME 2b
     # a misidentified electron is a reconstructed photon which is matched to a generator level electron
@@ -527,11 +527,12 @@ class TTGammaProcessor(processor.ProcessorABC):
         # More hints are in the twiki
         triJet = ... # FIXME 2a
         # Sum together jets from the triJet object and find its pt and mass
-        triJetPt =   ...  # solution to FIXME 2a
-        triJetMass = ...  # solution to FIXME 2a
+        triJetPt = (triJet.first + triJet.second + triJet.third).pt  # solution to FIXME 2a
+        triJetMass = (triJet.first + triJet.second + triJet.third).mass  # solution to FIXME 2a
         # define the M3 variable, the triJetMass of the combination with the highest triJetPt value
         # (ak.argmax and ak.singletons will be helpful here)
-        M3 = ... # solution to FIXME 2a               
+        highPtIdx= ak.argmax(triJetPt, axis=-1, keepdims=True)
+        M3 = triJetMass[highPtIdx] # solution to FIXME 2a               
         
         # For all the other event-level variables, we can form the variables from just
         # the leading (in pt) objects rather than form all combinations and arbitrate them
@@ -548,8 +549,7 @@ class TTGammaProcessor(processor.ProcessorABC):
         # define egammaMass, mass of leadingElectron and leadingPhoton system
         egammaMass  = (leadingElectron + leadingPhoton).mass
         # define mugammaMass analogously
-     
-        mugammaMass = ...  # solution to FIXME 2a
+        mugammaMass = (leadingMuon + leadingPhoton).mass  # solution to FIXME 2a
         gammaMasses = {'electron': egammaMass, 'muon': mugammaMass }
 
         ###################
