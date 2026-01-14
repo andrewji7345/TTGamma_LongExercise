@@ -211,9 +211,9 @@ def categorizeGenPhoton(photon):
     # a genuine photon is a reconstructed photon which is matched to a generator level photon, and does not have a hadronic parent
     isGenPho = matchedPho & ~hadronicParent  # FIXME 2b
     # a hadronic photon is a reconstructed photon which is matched to a generator level photon, but has a hadronic parent
-    isHadPho = ... #  FIXME 2b
+    isHadPho = matchedPho & hadronicParent #  FIXME 2b
     # a misidentified electron is a reconstructed photon which is matched to a generator level electron
-    isMisIDele = # FIXME 2b matchedEle and matchedPho are exclusive
+    isMisIDele = matchedEle# FIXME 2b matchedEle and matchedPho are exclusive
     # a hadronic/fake photon is a reconstructed photon that does not fall within any of the above categories
     isHadFake = ~(matchedPho | matchedEle)# FIXME 2b
 
@@ -396,11 +396,9 @@ class TTGammaProcessor(processor.ProcessorABC):
             elif shift_syst == "JERDown":
                 jets = corrected_jets.JER.down
             elif shift_syst == "JESUp":
-                print()
                 jets = ...  #FIXME 4
             elif shift_syst == "JESDown":
                 jets = ...  #FIXME 4
-                print()
             else:
                 # either nominal or some shift systematic unrelated to jets
                 jets = corrected_jets
@@ -525,7 +523,7 @@ class TTGammaProcessor(processor.ProcessorABC):
         # Find all possible combinations of 3 tight jets in the events
         # Hint: using the ak.combinations(array,n) method chooses n unique items from array.
         # More hints are in the twiki
-        triJet = ... # FIXME 2a
+        triJet = ak.combinations(tightJet, 3, fields=["first", "second", "third"]) # FIXME 2a
         # Sum together jets from the triJet object and find its pt and mass
         triJetPt = (triJet.first + triJet.second + triJet.third).pt  # solution to FIXME 2a
         triJetMass = (triJet.first + triJet.second + triJet.third).mass  # solution to FIXME 2a
@@ -549,6 +547,7 @@ class TTGammaProcessor(processor.ProcessorABC):
         # define egammaMass, mass of leadingElectron and leadingPhoton system
         egammaMass  = (leadingElectron + leadingPhoton).mass
         # define mugammaMass analogously
+
         mugammaMass = (leadingMuon + leadingPhoton).mass  # solution to FIXME 2a
         gammaMasses = {'electron': egammaMass, 'muon': mugammaMass }
 
