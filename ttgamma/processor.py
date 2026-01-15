@@ -219,7 +219,7 @@ def categorizeGenPhoton(photon):
     # a misidentified electron is a reconstructed photon which is matched to a generator level electron
     isMisIDele = matchedEle# FIXME 2b matchedEle and matchedPho are exclusive
     # a hadronic/fake photon is a reconstructed photon that does not fall within any of the above categories
-    isHadFake = ~(matchedPho | matchedEle) & hadronicParent # FIXME 2b
+    isHadFake = ~matchedPho & ~matchedEle & ~hadronicParent# FIXME 2b
 
     # integer definition for the photon category axis
     # since false = 0 , true = 1, this only leaves the integer value of the category it falls into
@@ -882,7 +882,7 @@ class TTGammaProcessor(processor.ProcessorABC):
                 # fill photon_chIso histogram, using the loosePhotons array (photons passing all cuts, except the charged hadron isolation cuts)
                 output["photon_chIso"].fill(
                     chIso=leadingPhotonLoose.chIso[phoselLoose],
-                    category=phoCategory[phoselLoose],
+                    category=phoCategoryLoose[phoselLoose],
                     lepFlavor=lepton,
                     systematic=syst,
                     weight=evtWeight[phoselLoose],
