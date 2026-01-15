@@ -547,8 +547,8 @@ class TTGammaProcessor(processor.ProcessorABC):
         # define the M3 variable, the triJetMass of the combination with the highest triJetPt value
         # (ak.argmax and ak.singletons will be helpful here)
         highPtIdx= ak.argmax(triJetPt, axis=-1, keepdims=True)
-        M3 = ak.firsts(triJetMass[highPtIdx]) # solution to FIXME 2a
-
+        M3 = ak.firsts(triJetMass[highPtIdx]) # solution to FIXME 2a               
+        
         # For all the other event-level variables, we can form the variables from just
         # the leading (in pt) objects rather than form all combinations and arbitrate them
         # this is because all of our signal and control regions require exactly zero or one of them
